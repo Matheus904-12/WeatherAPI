@@ -7,5 +7,5 @@ class WeatherData: #Entidade
     city: str
     temperature: float
     description: str
-    humidity: int
+    humidity: float
     wind_speed: float
