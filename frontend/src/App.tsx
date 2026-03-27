@@ -44,20 +44,20 @@ interface WeatherData {
   hourly: Forecast[];
 }
 
-const MOCK_DATA: WeatherData = {
-  city: "Mogi das Cruzes",
-  temperature: 22,
-  description: "Ensolarado", /*Parcialmente Nublado, Nublado, Chuva, Tempestade, Neve*/
-  humidity: 75,
-  wind_speed: 10,
-  hourly: [
-    { time: "10:00", temp: 22 },
-    { time: "11:00", temp: 23 },
-    { time: "12:00", temp: 24 },
-    { time: "13:00", temp: 25 },
-    { time: "14:00", temp: 26 },
-  ]
-}
+// const MOCK_DATA: WeatherData = {
+//   city: "Mogi das Cruzes",
+//   temperature: 22,
+//   description: "Ensolarado", /*Parcialmente Nublado, Nublado, Chuva, Tempestade, Neve*/
+//   humidity: 75,
+//   wind_speed: 10,
+//   hourly: [
+//     { time: "10:00", temp: 22 },
+//     { time: "11:00", temp: 23 },
+//     { time: "12:00", temp: 24 },
+//     { time: "13:00", temp: 25 },
+//     { time: "14:00", temp: 26 },
+//   ]
+// }
 
 const weatherTranslations: Record<string, string> = {
   "Clear": "Céu Limpo",
