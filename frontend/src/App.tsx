@@ -2,7 +2,10 @@ import { useState } from 'react'
 import './App.css'
 
 const AnimatedIcon = ({ type }: { type: string }) => {
-  if (type === "Ensolarado" || type === "Sunny") {
+  const isSunny = ["Clear", "Sunny", "Ensolarado"].some(s => type.includes(s));
+  const isRainy = ["Rain", "Chuva", "Storm"].some(s => type.includes(s));
+
+  if (isSunny && !isRainy) {
     return (
       <svg width="120" height="120" viewBox="0 0 24 24" fill="none" className="icon-sun">
         <circle cx="12" cy="12" r="5" fill="#facc15" />
@@ -12,7 +15,7 @@ const AnimatedIcon = ({ type }: { type: string }) => {
           ))}
         </g>
       </svg>
-    );
+    )
   }
 
   return (
@@ -37,7 +40,7 @@ interface WeatherData {
   temperature: number;
   description: string;
   humidity: number;
-  windSpeed: string;
+  wind_speed: number;
   hourly: Forecast[];
 }
 
@@ -46,7 +49,7 @@ const MOCK_DATA: WeatherData = {
   temperature: 22,
   description: "Ensolarado", /*Parcialmente Nublado, Nublado, Chuva, Tempestade, Neve*/
   humidity: 75,
-  windSpeed: "10 km/h",
+  wind_speed: 10,
   hourly: [
     { time: "10:00", temp: 22 },
     { time: "11:00", temp: 23 },
@@ -56,14 +59,37 @@ const MOCK_DATA: WeatherData = {
   ]
 }
 
+const weatherTranslations: Record<string, string> = {
+  "Clear": "Céu Limpo",
+  "Sunny": "Ensolarado",
+  "Partially cloudy": "Parcialmente Nublado",
+  "Cloudy": "Nublado",
+  "Overcast": "Encoberto",
+  "Rain": "Chuva",
+  "Rain, Overcast": "Chuva",
+  "Rain, Partially cloudy": "Chuva com Sol",
+  "Snow": "Neve",
+}
+
 function App() {
   const [city, setCity] = useState('');
   const [weather, setWeather] = useState<WeatherData | null>(null);
-  const handleSearch = () => {
-    console.log("Buscando clima para:", city);
-      if (city.trim() !== "") {
-        setWeather(MOCK_DATA);
-      }
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const handleSearch = async () => {
+    if (!city) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/weather/${city}`);
+      if (!response.ok) throw new Error("Cidade não encontrada");
+      const data = await response.json();
+      setWeather(data);
+    } catch (err) {
+      setError("Erro ao buscar clima. Verifique o nome da cidade.")
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,6 +103,9 @@ function App() {
         </div>
       </div>
 
+      {loading && <p style={{ textAlign: 'center', color: 'white' }}>Carregando...</p>}
+      {error && <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>}
+
       {weather && ( 
         <div className="main-content" style={{ animation: 'fadeIn 0.8s ease' }}>
           {/* Card Hero Estilo Dribbble */}
@@ -85,7 +114,7 @@ function App() {
               <AnimatedIcon type={weather.description} />
               <div>
                 <p className="city-name">{weather.city}</p>
-                <p className="description">{weather.description}</p>
+                <p className="description">{weatherTranslations[weather.description] ||weather.description}</p>
               </div>
             </div>
             <div className="hero-right">
@@ -100,9 +129,9 @@ function App() {
             </div>
             <div className="glass-card">
               <span className="label">Velocidade do Vento</span>
-              <span className="value">{weather.windSpeed}</span>
+              <span className="value">{weather.wind_speed}km/h</span>
             </div>
-            <div className="glass-card" style={{ gridColumn: 'span 2'}}>
+            {/* <div className="glass-card" style={{ gridColumn: 'span 2'}}>
               <span className="label">Previsão Horária</span>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
                 {weather.hourly.map((h, i) => (
@@ -112,7 +141,7 @@ function App() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
