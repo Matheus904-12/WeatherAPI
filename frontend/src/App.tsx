@@ -99,11 +99,11 @@ function App() {
       <div className="search-container">
         <div className="search-box">
           <input type="text" placeholder="Digite o nome da cidade..." value={city} onChange={(e) => setCity(e.target.value)}/>
-          <button onClick={handleSearch}>Buscar</button>
+          <button className="boton-elegante" onClick={handleSearch}>Buscar</button>
         </div>
       </div>
 
-      {loading && <p style={{ textAlign: 'center', color: 'white' }}>Carregando...</p>}
+      {loading && <div className="btn-shine">Buscando dados em tempo real...</div>}
       {error && <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>}
 
       {weather && ( 

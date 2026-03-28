@@ -84,21 +84,6 @@ body::before {
   outline: none;
 }
 
-.search-box button {
-  background: var(--accent-white);
-  color: black;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 100px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
-}
-
-.search-box button:hover {
-  background: #cecece;
-  transform: scale(1.05);
-}
 
 .bg-text {
   position: absolute;
@@ -125,7 +110,10 @@ body::before {
 }
 
 .city-name {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  word-wrap: break-word;
+  max-width: 300px;
   font-weight: 600;
   margin: 0;
 }
@@ -252,3 +240,74 @@ body::before {
   .glass-card { padding: 1rem; }
   .container { padding: 1rem; }
 }
+
+.boton-elegante {
+  padding: 12px 24px;
+  border: 2px solid #2c2c2c;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.4s ease;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+.boton-elegante::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: scale(0);
+  transition: transform 0.5s ease;
+}
+
+.boton-elegante:hover::after {
+  transform: scale(4);
+}
+
+.boton-elegante:hover {
+  border-color: #666666;
+  background: #292929;
+}
+
+
+.btn-shine {
+  text-align: center;
+  margin: 2rem auto;
+  color: #fff;
+  background: linear-gradient(to right, #9f9f9f 0, #fff 10%, #868686 20%);
+  background-position: 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s infinite linear;
+  animation-fill-mode: forwards;
+  -webkit-text-size-adjust: none;
+  font-weight: 600;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0;
+  }
+  60% {
+    background-position: 180px;
+  }
+  100% {
+    background-position: 180px;
+  }
+}
+
