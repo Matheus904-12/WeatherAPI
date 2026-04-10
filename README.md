@@ -2,20 +2,20 @@
 
 Um serviço fullstack moderno para consulta de previsões meteorológicas, construído com foco em **Clean Code**, **Arquitetura Hexagonal** e **DDD (Domain-Driven Design)**.
 
-![Status do Projeto](https://img.shields.io/badge/Status-Fase%201%20e%202%20Conclu%C3%ADdas-success)
-![Tecnologias](https://img.shields.io/badge/Stack-React%20%7C%20TypeScript%20%7C%20FastAPI-blue)
+![Status do Projeto](https://img.shields.io/badge/Status-Fases%201,%202%20e%203%20Conclu%C3%ADdas-success)
+![Tecnologias](https://img.shields.io/badge/Stack-React%20%7C%20TypeScript%20%7C%20FastAPI%20%7C%20Redis-blue)
 
 ## 🚀 Sobre o Projeto
 Este projeto foi desenvolvido como parte do desafio oficial do **roadmap.sh**. 
 **Link do projeto:** [https://roadmap.sh/projects/weather-api-wrapper-service](https://roadmap.sh/projects/weather-api-wrapper-service)
 
-O objetivo é construir uma API que consome um serviço de clima de terceiros (Visual Crossing) e fornece uma interface limpa e performática para o usuário final.
+O objetivo é construir uma API que consome um serviço de clima de terceiros (Visual Crossing) e fornece uma interface limpa, performática e cacheada para o usuário final.
 
 ---
 
 ## 🏗️ Arquitetura do Sistema
 
-O backend foi estruturado utilizando **Arquitetura Hexagonal (Ports & Adapters)** para garantir que a lógica de negócio seja independente de tecnologias externas.
+O backend foi estruturado utilizando **Arquitetura Hexagonal (Ports & Adapters)** para garantir que a lógica de negócio seja independente de tecnologias externas. No final da Fase 3, implementamos o **Decorator Pattern** para adicionar suporte ao Redis de forma não intrusiva.
 
 ```mermaid
 graph TD
@@ -30,13 +30,16 @@ graph TD
         P[ports.py]
     end
     subgraph Infrastructure
+        RA[redis_adapter.py]
         A[weather_api_adapter.py]
     end
 
     R --> UC
     UC --> P
-    P -.-> A
+    P -.-> RA
+    RA -.-> A
     A --> VC[Visual Crossing API]
+    RA --> RD[Redis Cache]
 ```
 
 ---
@@ -45,22 +48,21 @@ graph TD
 
 ### 🎨 Frontend (React + TypeScript)
 - **Interface Premium**: Design inspirado no Dribbble com efeitos de Glassmorphism.
+- **Internacionalização**: Suporte a traduções (PT-BR) e mapeamento dinâmico de ícones.
 - **Animações Dinâmicas**: Ícones de clima animados via SVG e CSS Keyframes.
-- **Responsividade**: Layout adaptável para desktop e dispositivos móveis.
 
 ### ⚙️ Backend (FastAPI + Python)
-- **Injeção de Dependência**: desacoplamento total entre camadas.
+- **Cache de 12h com Redis**: Otimização de performance e redução de consumo da API externa.
+- **Injeção de Dependência**: desacoplamento total entre camadas via `app.state`.
 - **Validação Estrita**: Uso de Pydantic para garantir integridade dos dados.
-- **Documentação Automática**: Integrada via Swagger UI em `/docs`.
 
 ---
 
 ## 🛠️ Como Executar
 
-### 1. Clonar o Repositório
+### 1. Iniciar Infraestrutura (Docker)
 ```bash
-git clone https://github.com/Matheus904-12/WeatherAPI.git
-cd WeatherAPI
+docker-compose up -d
 ```
 
 ### 2. Configurar o Backend
@@ -90,6 +92,12 @@ npm run dev
 ## 📅 Roadmap de Evolução
 - [x] Fase 1: Interface UI/UX Animada.
 - [x] Fase 2: Estrutura Core do Backend.
-- [ ] Fase 3: Cache de 12h com Redis.
+- [x] Fase 3: Cache de 12h com Redis.
 - [ ] Fase 4: Histórico de Buscas com MongoDB.
-- [ ] Fase 5: Integração Final e Deploy.
+- [ ] Fase 5: Testes Automatizados & CI/CD.
+- [ ] Fase 6: Debugging Masterclass.
+- [ ] Fase 7: Deploy na Azure.
+- [ ] Fase 8: Refatoração UI com Ionic Framework.
+
+---
+Desenvolvido por **Matheus** como parte do aprendizado avançado em Python, DDD e Clean Code.
