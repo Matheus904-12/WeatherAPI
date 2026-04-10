@@ -106,11 +106,12 @@ function App() {
       {loading && <div className="btn-shine">Buscando dados em tempo real...</div>}
       {error && <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>}
 
-      {weather && ( 
-        <div className="main-content" style={{ animation: 'fadeIn 0.8s ease' }}>
+      {weather && (
+        <div className="main-content">
           {/* Card Hero Estilo Dribbble */}
           <div className="glass-card hero-card">
-            <div className="hero-left">
+            <div className="hero-content">
+              <div className="hero-left">
               <AnimatedIcon type={weather.description} />
               <div>
                 <p className="city-name">{weather.city}</p>
@@ -119,6 +120,7 @@ function App() {
             </div>
             <div className="hero-right">
               <h1 className="temp-main">{weather.temperature}°</h1>
+            </div>
             </div>
           </div>
         

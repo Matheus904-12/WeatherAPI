@@ -1,10 +1,7 @@
 import httpx
 import os
-from dotenv import load_dotenv
 from src.domain.ports import WeatherRepository
 from src.domain.entities import WeatherData
-
-load_dotenv()
 
 class VisualCrossingAdapter(WeatherRepository):
 
