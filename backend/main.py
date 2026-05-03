@@ -6,6 +6,7 @@ from src.interface.weather_router import router as weather_router
 from fastapi.middleware.cors import CORSMiddleware
 from src.infrastructure.redis_adapter import CacheWeatherRepository
 from src.infrastructure.weather_api_adapter import VisualCrossingAdapter
+from src.infrastructure.mongo_adapter import MongoHistoryRepository
 from src.application.use_cases import GetWeatherUseCase
 
 load_dotenv()
@@ -41,7 +42,13 @@ app.add_middleware(
 redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 api_adapter = VisualCrossingAdapter()
 cached_repo = CacheWeatherRepository(api_adapter, redis_client)
-weather_service = GetWeatherUseCase(cached_repo)
+
+# 3. Configurar MongoDB
+mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+history_repo = MongoHistoryRepository(mongo_url)
+
+# 4. Injetar no Use Case (Coração da Aplicação)
+weather_service = GetWeatherUseCase(cached_repo, history_repo)
 app.state.weather_service = weather_service
 
 app.include_router(weather_router)

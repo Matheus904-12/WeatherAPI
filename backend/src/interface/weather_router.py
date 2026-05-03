@@ -13,12 +13,13 @@ class WeatherResponse(BaseModel):
     humidity: float
     wind_speed: float
 
-@router.get("/{city}", response_model=WeatherResponse)
-def get_weather(city: str, request: Request):
+@router.get("/{city}")
+async def get_weather(city: str, request: Request):
     try:
-        use_case = request.app.state.weather_service
-        result = use_case.execute(city)
-        return result
+        # O serviço já vem injetado com Cache e Mongo do main.py
+        weather_service = request.app.state.weather_service
+        data = weather_service.execute(city)
+        return data
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
