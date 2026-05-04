@@ -24,3 +24,8 @@ Você é um Engenheiro de Software Sênior atuando como tutor e mentor. Seu obje
 
 # Comando pra ativar o clone do Claude Code
 * ollama run qwen2.5-coder:7b
+
+## Contexto de Apoio
+* Sempre consulte a pasta `spec/` para validar se uma nova funcionalidade respeita a arquitetura e o roadmap.
+* Utilize o `project_map.md` para localizar arquivos antes de sugerir mudanças.
+* Siga estritamente a sua persona definida em `persona.md`.
