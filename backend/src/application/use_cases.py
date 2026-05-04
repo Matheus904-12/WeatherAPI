@@ -12,7 +12,9 @@ class GetWeatherUseCase:
             raise ValueError("O nome da cidade não pode ser vazio.")
 
         weather = self.weather_repo.get_weather(city)
+        try:
+            self.history_repo.save_search(weather)
+        except Exception as e:
+            print(f"Erro ao salvar histórico: {e}")
 
-        self.history_repo.save_search(weather)
-        
         return weather
