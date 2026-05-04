@@ -51,6 +51,12 @@ history_repo = MongoHistoryRepository(mongo_url)
 weather_service = GetWeatherUseCase(cached_repo, history_repo)
 app.state.weather_service = weather_service
 
+@app.on_event("shutdown")
+def shutdown_event():
+    # Fechando conexão com MongoDB graciosamente
+    history_repo.client.close()
+    print("🔌 Conexões de banco encerradas com sucesso.")
+
 app.include_router(weather_router)
 
 @app.get("/health") #leitor de condição de ação

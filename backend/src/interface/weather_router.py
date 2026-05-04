@@ -11,8 +11,8 @@ class WeatherResponse(BaseModel):
     humidity: float
     wind_speed: float
 
-@router.get("/{city}")
-async def get_weather(city: str, request: Request):
+@router.get("/{city}", response_model=WeatherResponse)
+def get_weather(city: str, request: Request):
     try:
         # O serviço já vem injetado com Cache e Mongo do main.py
         weather_service = request.app.state.weather_service
@@ -24,8 +24,8 @@ async def get_weather(city: str, request: Request):
         print(f"Erro real: {e}")
         raise HTTPException(status_code=502, detail="Erro ao consultar API de clima.")
 
-@router.get("/history/all")
-async def get_history(request: Request):
+@router.get("/history/all", response_model=list[WeatherResponse])
+def get_history(request: Request):
     try:
         weather_service = request.app.state.weather_service
         history = weather_service.history_repo.get_all_history()
