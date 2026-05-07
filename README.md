@@ -79,8 +79,11 @@ python -m uvicorn main:app --reload
 ---
 
 ## 📅 Roadmap de Evolução
+- [x] Fase 1: Interface UI/UX Animada.
+- [x] Fase 2: Estrutura Core do Backend.
+- [x] Fase 3: Cache de 12h com Redis.
 - [x] Fase 4: Histórico de Buscas com MongoDB.
-- [x] Fase 5: Qualidade & Automação (Testes & CI).
+- [x] Fase 5: Qualidade & Automação (Testes & CI). ✅
 - [x] Bônus: Robô Coletor de Dados (Cronjob). ✅
 - [ ] Fase 6: Observabilidade & Debugging Masterclass.
 - [ ] Fase 7: Deploy na Azure.
