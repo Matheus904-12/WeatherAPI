@@ -1,3 +1,7 @@
+---
+description: 
+---
+
 # Especificação: Arquitetura Hexagonal & DDD
 
 ## Visão Geral
