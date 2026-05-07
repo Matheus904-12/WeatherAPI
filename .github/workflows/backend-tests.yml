@@ -9,6 +9,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    
+    # Adicionamos variáveis falsas apenas para o teste passar na inicialização
+    env:
+      WEATHER_API_KEY: "dummy_key_for_testing"
+      WEATHER_API_BASE_URL: "https://api.test.com"
+      REDIS_HOST: "localhost"
+      MONGO_URL: "mongodb://localhost:27017"
 
     steps:
     - name: Checkout do Código
