@@ -2,29 +2,27 @@
 
 Um serviço fullstack moderno para consulta de previsões meteorológicas, construído com foco em **Clean Code**, **Arquitetura Hexagonal**, **DDD** e **Qualidade de Software**.
 
-![Status do Projeto](https://img.shields.io/badge/Status-Fase%205%20Conclu%C3%ADda-success)
+![Status do Projeto](https://img.shields.io/badge/Status-Background%20Harvester%20Ativo-success)
 ![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue)
 
 ## 🚀 Sobre o Projeto
-Este projeto foi desenvolvido como parte do desafio oficial do **roadmap.sh**. 
-O foco atual é a robustez do backend e a automação de testes.
+Este projeto evoluiu de um simples wrapper para um **Coletor de Dados Automático**. Ele monitora cidades estratégicas e mantém um histórico persistente e cacheado para alta performance.
 
 ---
 
 ## 🏗️ Arquitetura do Sistema
 
-O backend utiliza **Arquitetura Hexagonal** para desacoplar a lógica de negócio das tecnologias externas.
+O backend utiliza **Arquitetura Hexagonal** e um agendador de tarefas em segundo plano.
 
 ```mermaid
 graph TD
     subgraph Interface
         R[weather_router.py]
-        T[test_api.py]
+        S[scheduler.py]
     end
     subgraph Application
         UC[use_cases.py]
-        TU[test_use_cases.py]
     end
     subgraph Domain
         E[entities.py]
@@ -37,9 +35,8 @@ graph TD
     end
 
     R --> UC
+    S --> UC
     UC --> P
-    T -.-> R
-    TU -.-> UC
     P -.-> RA
     P -.-> MA
     RA -.-> A
@@ -50,18 +47,16 @@ graph TD
 
 ---
 
-## ✨ Funcionalidades e Qualidade
+## ✨ Funcionalidades em Destaque
 
-### 🧪 Testes e Automação (Novo!)
-- **Testes Unitários**: Cobertura total da lógica de negócio no `GetWeatherUseCase`.
-- **Mocks & Dublês**: Uso de `pytest-mock` para simular APIs e Bancos de Dados.
-- **Testes de Integração**: Validação de endpoints FastAPI via `TestClient`.
-- **Pipeline CI/CD**: Automação via GitHub Actions para garantir que nenhum commit quebre o sistema.
+### 🤖 Robô Coletor (Background Harvester) - **NOVO!**
+- **Agendamento Inteligente**: O sistema utiliza `APScheduler` para buscar o clima de cidades pré-definidas (ex: SP, Londres, NY, Tóquio) a cada 60 minutos.
+- **Cache Warming**: O robô mantém o cache do Redis sempre "quente", garantindo resposta instantânea para buscas populares.
+- **Persistência Automática**: Todas as coletas são salvas automaticamente no MongoDB.
 
-### ⚙️ Backend (FastAPI + Python)
-- **Persistência com MongoDB**: Histórico permanente de todas as buscas.
-- **Cache com Redis**: Otimização de performance de 12h.
-- **Resiliência**: Tratamento de falhas de banco (Best Effort).
+### 🧪 Qualidade de Software
+- **Testes Unitários & Integração**: 100% validado via `pytest`.
+- **Pipeline CI/CD**: Garantia de integridade automática no GitHub Actions.
 
 ---
 
@@ -78,24 +73,15 @@ cd backend
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-pytest # Rodar os testes locais
-```
-
-### 3. Configurar o Frontend
-```bash
-cd ../frontend
-npm install
-npm run dev
+python -m uvicorn main:app --reload
 ```
 
 ---
 
 ## 📅 Roadmap de Evolução
-- [x] Fase 1: Interface UI/UX Animada.
-- [x] Fase 2: Estrutura Core do Backend.
-- [x] Fase 3: Cache de 12h com Redis.
 - [x] Fase 4: Histórico de Buscas com MongoDB.
-- [x] Fase 5: Qualidade & Automação (Testes & CI). ✅
+- [x] Fase 5: Qualidade & Automação (Testes & CI).
+- [x] Bônus: Robô Coletor de Dados (Cronjob). ✅
 - [ ] Fase 6: Observabilidade & Debugging Masterclass.
 - [ ] Fase 7: Deploy na Azure.
 - [ ] Fase 8: Refatoração UI com Ionic Framework.
