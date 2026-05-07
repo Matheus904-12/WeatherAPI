@@ -36,3 +36,4 @@ def test_get_weather_endpoint_success(mocker):
     assert data["city"] == "Rio de Janeiro"
     assert data["temperature"] == 30.0
     assert data["description"] == "Ensolarado"
+                        
