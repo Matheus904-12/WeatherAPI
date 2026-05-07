@@ -1,29 +1,30 @@
 # 🌦️ Weather API Wrapper Service
 
-Um serviço fullstack moderno para consulta de previsões meteorológicas, construído com foco em **Clean Code**, **Arquitetura Hexagonal** e **DDD (Domain-Driven Design)**.
+Um serviço fullstack moderno para consulta de previsões meteorológicas, construído com foco em **Clean Code**, **Arquitetura Hexagonal**, **DDD** e **Qualidade de Software**.
 
-![Status do Projeto](https://img.shields.io/badge/Status-Fases%201%20a%204%20Conclu%C3%ADdas-success)
-![Tecnologias](https://img.shields.io/badge/Stack-React%20%7C%20TypeScript%20%7C%20FastAPI%20%7C%20Redis%20%7C%20MongoDB-blue)
+![Status do Projeto](https://img.shields.io/badge/Status-Fase%205%20Conclu%C3%ADda-success)
+![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue)
 
 ## 🚀 Sobre o Projeto
 Este projeto foi desenvolvido como parte do desafio oficial do **roadmap.sh**. 
-**Link do projeto:** [https://roadmap.sh/projects/weather-api-wrapper-service](https://roadmap.sh/projects/weather-api-wrapper-service)
-
-O objetivo é construir uma API que consome um serviço de clima de terceiros (Visual Crossing) e fornece uma interface limpa, performática e persistente para o usuário final.
+O foco atual é a robustez do backend e a automação de testes.
 
 ---
 
 ## 🏗️ Arquitetura do Sistema
 
-O backend utiliza **Arquitetura Hexagonal (Ports & Adapters)** para desacoplar a lógica de negócio das tecnologias externas.
+O backend utiliza **Arquitetura Hexagonal** para desacoplar a lógica de negócio das tecnologias externas.
 
 ```mermaid
 graph TD
     subgraph Interface
         R[weather_router.py]
+        T[test_api.py]
     end
     subgraph Application
         UC[use_cases.py]
+        TU[test_use_cases.py]
     end
     subgraph Domain
         E[entities.py]
@@ -37,6 +38,8 @@ graph TD
 
     R --> UC
     UC --> P
+    T -.-> R
+    TU -.-> UC
     P -.-> RA
     P -.-> MA
     RA -.-> A
@@ -47,17 +50,18 @@ graph TD
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Funcionalidades e Qualidade
 
-### 🎨 Frontend (React + TypeScript)
-- **Interface Premium**: Design inspirado no Dribbble com efeitos de Glassmorphism.
-- **Animações Dinâmicas**: Ícones de clima animados via SVG e CSS.
+### 🧪 Testes e Automação (Novo!)
+- **Testes Unitários**: Cobertura total da lógica de negócio no `GetWeatherUseCase`.
+- **Mocks & Dublês**: Uso de `pytest-mock` para simular APIs e Bancos de Dados.
+- **Testes de Integração**: Validação de endpoints FastAPI via `TestClient`.
+- **Pipeline CI/CD**: Automação via GitHub Actions para garantir que nenhum commit quebre o sistema.
 
 ### ⚙️ Backend (FastAPI + Python)
-- **Cache de 12h com Redis**: Otimização de performance.
-- **Persistência com MongoDB**: Histórico permanente de todas as buscas realizadas.
-- **Alta Resiliência**: Tratamento de falhas de banco (Best Effort).
-- **Injeção de Dependência**: desacoplamento total entre camadas via `app.state`.
+- **Persistência com MongoDB**: Histórico permanente de todas as buscas.
+- **Cache com Redis**: Otimização de performance de 12h.
+- **Resiliência**: Tratamento de falhas de banco (Best Effort).
 
 ---
 
@@ -65,24 +69,17 @@ graph TD
 
 ### 1. Iniciar Infraestrutura (Docker)
 ```bash
-# Sobe Redis e MongoDB
-docker-compose up -d
+docker compose up -d
 ```
 
 ### 2. Configurar o Backend
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
+source venv/bin/activate
 pip install -r requirements.txt
+pytest # Rodar os testes locais
 ```
-Crie um arquivo `.env` na pasta `backend/`:
-```env
-WEATHER_API_KEY=sua_chave_aqui
-WEATHER_API_BASE_URL=https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline
-MONGO_URL=mongodb://localhost:27017
-```
-Inicie o servidor: `uvicorn main:app --reload`
 
 ### 3. Configurar o Frontend
 ```bash
@@ -97,8 +94,8 @@ npm run dev
 - [x] Fase 1: Interface UI/UX Animada.
 - [x] Fase 2: Estrutura Core do Backend.
 - [x] Fase 3: Cache de 12h com Redis.
-- [x] Fase 4: Histórico de Buscas com MongoDB. ✅
-- [ ] Fase 5: Qualidade & Automação (Pytest).
+- [x] Fase 4: Histórico de Buscas com MongoDB.
+- [x] Fase 5: Qualidade & Automação (Testes & CI). ✅
 - [ ] Fase 6: Observabilidade & Debugging Masterclass.
 - [ ] Fase 7: Deploy na Azure.
 - [ ] Fase 8: Refatoração UI com Ionic Framework.
