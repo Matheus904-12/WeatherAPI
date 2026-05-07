@@ -8,6 +8,7 @@ from src.infrastructure.redis_adapter import CacheWeatherRepository
 from src.infrastructure.weather_api_adapter import VisualCrossingAdapter
 from src.infrastructure.mongo_adapter import MongoHistoryRepository
 from src.application.use_cases import GetWeatherUseCase
+from src.infrastructure.scheduler import setup_weather_scheduler
 
 load_dotenv()
 
@@ -53,11 +54,22 @@ history_repo = MongoHistoryRepository(mongo_url)
 weather_service = GetWeatherUseCase(cached_repo, history_repo)
 app.state.weather_service = weather_service
 
+# 5. Iniciar o Scheduler (Robô Coletor)
+@app.on_event("startup")
+def startup_event():
+    app.state.scheduler = setup_weather_scheduler(weather_service)
+    print("Robô Coletor de Clima iniciado com sucesso!")
+
 @app.on_event("shutdown")
 def shutdown_event():
+    # Parar o Scheduler
+    if hasattr(app.state, "scheduler"):
+        app.state.scheduler.shutdown()
+        print("Robô Coletor desligado.")
+        
     # Fechando conexão com MongoDB graciosamente
     history_repo.client.close()
-    print("🔌 Conexões de banco encerradas com sucesso.")
+    print("Conexões de banco encerradas com sucesso.")
 
 app.include_router(weather_router)
 
